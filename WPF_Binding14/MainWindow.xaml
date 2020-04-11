@@ -1,0 +1,100 @@
+﻿<Window x:Class="WPF_Binding14.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Binding14"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Binding 01">
+                <StackPanel Margin="20">
+                    <!--data source-->
+                    <Slider x:Name="slider"
+                            Minimum="5"
+                            Maximum="100"
+                            Value="20"
+                            TickFrequency="10"
+                            TickPlacement="Both"
+                            />
+                    <!--data receiver-->
+                    <Label Name="label"
+                        Content="Hello world!"
+                           FontSize="{Binding ElementName=slider, Path=Value, Mode=TwoWay}"/>
+                    <Button Width="100" Click="Button_Click">Click</Button>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Binding via code behind">
+                <StackPanel Margin="20">
+                    <TextBox Name="textBox" />
+                    <Slider x:Name="slider2" Minimum="5" Maximum="100"
+                            TickPlacement="Both"
+                            IsSnapToTickEnabled="True"/>
+                    <Label Name="label2" Content="Hello world"/>
+                    <Button Click="Clear_Click">Clear</Button>
+                </StackPanel>
+            </TabItem>
+            <!--TwoWay - якщо зміниться приймач - то автоматично оновиться і джерело-->
+            <TabItem Header="Binding 3">
+                <StackPanel Margin="20">
+                    <Slider Minimum="1"
+                            Maximum="100"
+                            Value="30"
+                            TickPlacement="Both"
+                            TickFrequency="10"
+                            Name="slider3"
+                            IsSnapToTickEnabled="true"/>
+                    <Label Margin="10"
+                           Name="lbSample"
+                           FontSize="{Binding ElementName=slider3, Path=Value, Mode=TwoWay}" Content="Some text"/>
+                    <TextBox Text="{Binding ElementName=lbSample, Path=FontSize, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <!--Update source trigger - коли оновлюємо елемент
+                - PropertyChanged - по замовчуванню всім, крім ТекстБокса 
+                (бо в ТБ - LostFocus)-->
+            </TabItem>
+            <TabItem Header="MultipleBinding">
+                <StackPanel Margin="10">
+                    <Slider Minimum="1"
+                            Maximum="100"
+                            Value="30"
+                            TickPlacement="Both"
+                            TickFrequency="10"
+                            Name="slider4"
+                            IsSnapToTickEnabled="true"/>
+                    <Label Content="Hello"
+                           Name="lbContent"/>
+                    <ListBox x:Name="list">
+                        <ListBoxItem Foreground="Red">Red</ListBoxItem>
+                        <ListBoxItem Foreground="Magenta">Magenta</ListBoxItem>
+                        <ListBoxItem Foreground="Violet">Violet</ListBoxItem>
+                        <ListBoxItem Foreground="Navy">Navy</ListBoxItem>
+                    </ListBox>
+                    <Label Content="{Binding ElementName=lbContent, Path=Content}"
+                           Foreground="{Binding ElementName=list, Path=SelectedItem.Foreground}" 
+                           FontSize="{Binding ElementName=slider4, Path=Value}"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="OneWayToSource">
+                <StackPanel Margin="20">
+                    <TextBox Margin="10"
+                             Height="70"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Text="{Binding ElementName=run, Path=Text, 
+                        Mode=OneWayToSource,
+                        UpdateSourceTrigger=PropertyChanged}"/>
+                    <FlowDocumentScrollViewer>
+                        <FlowDocument>
+                            <Paragraph>Some text</Paragraph>
+                            <Paragraph>
+                                <Run Name="run"></Run>
+                            </Paragraph>
+                        </FlowDocument>
+                    </FlowDocumentScrollViewer>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
